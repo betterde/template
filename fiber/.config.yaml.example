@@ -1,0 +1,8 @@
+env: production
+
+http:
+  listen: 0.0.0.0:8443
+  tlsKey: /certs/domain.tld.key
+  tlsCert: /certs/domain.tld.crt
+logging:
+  level: ERROR

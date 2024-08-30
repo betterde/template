@@ -1,0 +1,20 @@
+services:
+  server:
+    image: server:latest
+    ports:
+      - 0.0.0.0:443:443
+    networks:
+      - traefik
+    hostname: server
+    environment:
+      - ENV_PREFIX=SERVER
+      - ${ENV_PREFIX}_ENV=production
+      - ${ENV_PREFIX}_HTTP_LISTEN=0.0.0.0:443
+      - ${ENV_PREFIX}_HTTP_TLSKEY=/certs/domain.tld.key
+      - ${ENV_PREFIX}_HTTP_TLSCERT=/certs/domain.tld.crt
+      - ${ENV_PREFIX}_LOGGING_LEVEL=INFO
+    container_name: server
+
+networks:
+  traefik:
+    external: true
