@@ -44,3 +44,16 @@ ${PREFIX}_HTTP_LISTEN=0.0.0.0:443
 ${PREFIX}_HTTP_TLSKEY=/certs/domain.tld.key
 ${PREFIX}_HTTP_TLSCERT=/certs/domain.tld.crt
 ```
+
+# Frontend
+
+Initialize your project in the `spa` directory, configure the project to be packaged and output to the `spa/dist` directory, and then uncomment lines 30 to 35 in the `api/routes/register.go` file:
+
+```go
+app.Get("*", filesystem.New(filesystem.Config{
+	Root:               spa.Serve(),
+	Index:              "index.html",
+	NotFoundFile:       "index.html",
+	ContentTypeCharset: "UTF-8",
+})).Name("SPA static resource")
+```
