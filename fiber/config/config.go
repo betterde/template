@@ -1,6 +1,8 @@
 package config
 
 import (
+	"errors"
+	"github.com/betterde/template/fiber/internal/build"
 	"github.com/betterde/template/fiber/internal/journal"
 	"github.com/spf13/viper"
 	"os"
@@ -26,26 +28,27 @@ type Logging struct {
 	Level string `yaml:"level"`
 }
 
-func Parse(file string, envPrefix string) {
+func Parse(file string) {
 	if file != "" {
 		viper.SetConfigFile(file)
 	} else {
 		viper.AddConfigPath(".")
-		viper.SetConfigName(".config")
+		viper.SetConfigType("yaml")
+		viper.SetConfigName("." + build.Name)
 	}
 
-	// read in environment variables that match
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-	viper.SetEnvPrefix(envPrefix)
+	var notFoundError viper.ConfigFileNotFoundError
 
 	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err != nil {
-		journal.Logger.Errorf("Failed to read configuration file: %s", err)
-		os.Exit(1)
+	if err := viper.ReadInConfig(); err != nil && errors.As(err, &notFoundError) {
+		journal.Logger.Debugf("Config file not found, using defaults")
 	}
 
 	// read in environment variables that match
 	viper.AutomaticEnv()
+
+	viper.SetEnvPrefix(build.Name)
+	viper.SetEnvKeyReplacer(strings.NewReplacer("_", "."))
 
 	err := viper.Unmarshal(&Conf)
 	if err != nil {

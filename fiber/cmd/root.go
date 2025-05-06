@@ -24,6 +24,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/betterde/template/fiber/config"
+	"github.com/betterde/template/fiber/internal/build"
 	"github.com/betterde/template/fiber/internal/journal"
 	"github.com/betterde/template/fiber/pkg/api"
 	"os"
@@ -33,26 +34,22 @@ import (
 )
 
 var (
-	name    = "CDNS"
-	build   = "current"
-	commit  = "none"
-	version = "develop"
 	verbose bool
 	cfgFile string
-)
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:     "fiber",
-	Short:   "A brief description of your application",
-	Version: fmt.Sprintf("Version: %s\nBuild at: %s\nCommit hash: %s", version, build, commit),
-}
+	// rootCmd represents the base command when called without any subcommands
+	rootCmd = &cobra.Command{
+		Use:     build.Name,
+		Short:   build.Desc,
+		Version: fmt.Sprintf("Version: %s\nBuild at: %s\nCommit hash: %s", build.Version, build.Build, build.Commit),
+	}
+)
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	// Init HTTP server
-	api.InitServer(name, rootCmd.Version)
+	api.InitServer(build.Name, rootCmd.Version)
 
 	err := rootCmd.Execute()
 	if err != nil {
@@ -86,7 +83,7 @@ func initConfig() {
 	journal.InitLogger()
 
 	// Parse config from file and env variables
-	config.Parse(cfgFile, "")
+	config.Parse(cfgFile)
 
 	level := viper.GetString("logging.level")
 	if verbose {
