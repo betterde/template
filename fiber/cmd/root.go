@@ -74,7 +74,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose mode")
 
 	// Print app version
-	rootCmd.SetVersionTemplate("{{printf \"%s\" .Version}}\n")
+	rootCmd.SetVersionTemplate("{{ .Version }}\n")
 }
 
 // initConfig reads in config file and ENV variables if set.
