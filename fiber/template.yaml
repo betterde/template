@@ -5,3 +5,4 @@ variables:
     placeholder: "Please enter your project name"
   - name: "desc"
     placeholder: "Please enter your project description"
+delete_template_file: true
