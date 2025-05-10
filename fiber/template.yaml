@@ -1,2 +1,7 @@
-name: "Please enter project name"
-desc: "Please enter project description"
+name: "Fiber framework"
+desc: "This template is built on the Fiber v2 framework."
+variables:
+  - name: "name"
+    placeholder: "Please enter your project name"
+  - name: "desc"
+    placeholder: "Please enter your project description"
