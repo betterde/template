@@ -26,10 +26,17 @@ import (
 	"fmt"
 	"github.com/betterde/template/fiber/internal/journal"
 	"github.com/betterde/template/fiber/pkg/api"
+	"github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/lipgloss/table"
 	"github.com/spf13/cobra"
+	"golang.org/x/term"
 	"os"
-	"text/tabwriter"
+	"reflect"
+	"sort"
+	"strings"
 )
+
+const MethodColWidth = 8
 
 // routeCmd represents the route command
 var routeCmd = &cobra.Command{
@@ -37,7 +44,21 @@ var routeCmd = &cobra.Command{
 	Short: "List all registered routes",
 	Run: func(cmd *cobra.Command, args []string) {
 		routes := api.ServerInstance.Engine.GetRoutes(true)
-		writer := tabwriter.NewWriter(os.Stdout, 40, 0, 0, '.', tabwriter.TabIndent|tabwriter.Debug)
+		sort.Slice(routes, func(i, j int) bool {
+			iV := reflect.ValueOf(routes[i])
+			jV := reflect.ValueOf(routes[j])
+			iPosField := iV.FieldByName("pos")
+			jPosField := jV.FieldByName("pos")
+			return iPosField.Uint() < jPosField.Uint()
+		})
+
+		termWidth, _, err := term.GetSize(int(os.Stderr.Fd()))
+		if err != nil {
+			journal.Logger.Fatal(err)
+			os.Exit(1)
+		}
+
+		rows := make([][]string, 0, len(routes))
 
 		for _, route := range routes {
 			if route.Method == "HEAD" {
@@ -46,20 +67,17 @@ var routeCmd = &cobra.Command{
 				route.Method = "GET|HEAD"
 			}
 
-			if route.Name == "" {
-				route.Name = "."
-			}
-
-			if _, err := fmt.Fprintln(writer, route.Method, "\t", route.Path, "\t", route.Name, "\t"); err != nil {
-				journal.Logger.Error(err)
-				os.Exit(1)
-			}
+			rows = append(rows, []string{route.Method, format(route.Path, route.Name, termWidth-MethodColWidth, ".")})
 		}
 
-		if err := writer.Flush(); err != nil {
-			journal.Logger.Error(err)
-			os.Exit(1)
-		}
+		t := table.New().Border(lipgloss.HiddenBorder()).StyleFunc(func(row, col int) lipgloss.Style {
+			if col == 0 {
+				return lipgloss.NewStyle().Width(8)
+			}
+			return lipgloss.NewStyle().Padding(0, 1)
+		}).Rows(rows...).Width(termWidth)
+
+		fmt.Println(t.Render())
 	},
 }
 
@@ -75,4 +93,38 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// routeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func format(path, name string, terminalWidth int, paddingChar string) string {
+	// Calculate lengths
+	pathLen := len(path)
+	nameLen := len(name)
+
+	// Calculate available space for padding
+	// Account for spaces, methods, and fixed spacing
+	fixedSpacing := 7 // 2 spaces before methods, 3 spaces after methods, 2 spaces before name
+	maxPadding := terminalWidth - pathLen - nameLen - fixedSpacing
+
+	if maxPadding < 0 {
+		maxPadding = 0 // Prevent negative padding
+	}
+
+	// Build the formatted string
+	var builder strings.Builder
+	builder.WriteString("  ") // Space after methods
+	builder.WriteString(path)
+	builder.WriteString(" ") // Space after path
+
+	// Add padding
+	builder.WriteString(strings.Repeat(paddingChar, maxPadding))
+
+	// Add name if it exists
+	if name != "" {
+		builder.WriteString(" ") // Space before name
+		builder.WriteString(name)
+	} else {
+		builder.WriteString(paddingChar)
+	}
+
+	return builder.String()
 }
