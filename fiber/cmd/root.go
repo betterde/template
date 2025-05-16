@@ -58,6 +58,9 @@ func Execute() {
 }
 
 func init() {
+	// Initialize the logger using development environment.
+	journal.InitLogger()
+
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
@@ -79,9 +82,6 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	// Initialize the logger using development environment.
-	journal.InitLogger()
-
 	// Parse config from file and env variables
 	config.Parse(cfgFile)
 
