@@ -45,8 +45,10 @@ func InitServer(name, version string) {
 						journal.Logger.Errorw("Analysis server runtime error:", zap.Error(err))
 					}
 
+					ctx.Status(code)
+
 					// In case the SendFile fails
-					return ctx.Status(code).JSON(response.Send(code, err.Error(), err))
+					return response.Send(ctx, response.WithCode(code), response.WithMessage(err.Error()))
 				}
 
 				return nil

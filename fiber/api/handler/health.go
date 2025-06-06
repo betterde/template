@@ -6,5 +6,5 @@ import (
 )
 
 func HealthCheck(ctx *fiber.Ctx) error {
-	return ctx.JSON(response.Success("Success", nil))
+	return response.Success(ctx)
 }
