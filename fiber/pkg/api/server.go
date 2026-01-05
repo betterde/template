@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
+
 	"github.com/betterde/template/fiber/api/routes"
 	"github.com/betterde/template/fiber/config"
 	"github.com/betterde/template/fiber/internal/journal"

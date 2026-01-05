@@ -24,16 +24,15 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strings"
+
 	"github.com/betterde/template/fiber/internal/journal"
 	"github.com/betterde/template/fiber/pkg/api"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
-	"os"
-	"reflect"
-	"sort"
-	"strings"
 )
 
 const MethodColWidth = 8
@@ -44,13 +43,6 @@ var routeCmd = &cobra.Command{
 	Short: "List all registered routes",
 	Run: func(cmd *cobra.Command, args []string) {
 		routes := api.ServerInstance.Engine.GetRoutes(true)
-		sort.Slice(routes, func(i, j int) bool {
-			iV := reflect.ValueOf(routes[i])
-			jV := reflect.ValueOf(routes[j])
-			iPosField := iV.FieldByName("pos")
-			jPosField := jV.FieldByName("pos")
-			return iPosField.Uint() < jPosField.Uint()
-		})
 
 		termWidth, _, err := term.GetSize(int(os.Stderr.Fd()))
 		if err != nil {
