@@ -2,9 +2,10 @@ package spa
 
 import (
 	"embed"
-	"github.com/betterde/template/fiber/internal/journal"
 	"io/fs"
 	"net/http"
+
+	"github.com/betterde/template/fiber/internal/journal"
 )
 
 //go:embed dist/*

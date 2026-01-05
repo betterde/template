@@ -23,11 +23,12 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/betterde/template/fiber/config"
 	"github.com/betterde/template/fiber/internal/build"
 	"github.com/betterde/template/fiber/internal/journal"
 	"github.com/betterde/template/fiber/pkg/api"
-	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

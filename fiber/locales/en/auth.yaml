@@ -1,0 +1,14 @@
+name: auth
+desc: Auth module translations file
+translations:
+  failed:
+    desc:
+    content:
+      one: These credentials do not match our records.
+      more: These credentials do not match our records.
+  password:
+    desc:
+    content: The provided password is incorrect.
+  throttle:
+    desc:
+    content: Too many login attempts. Please try again in {seconds} seconds.

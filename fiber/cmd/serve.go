@@ -23,13 +23,14 @@ package cmd
 
 import (
 	"context"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/betterde/template/fiber/global"
 	"github.com/betterde/template/fiber/internal/journal"
 	"github.com/betterde/template/fiber/pkg/api"
 	"github.com/spf13/cobra"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 // serveCmd represents the serve command

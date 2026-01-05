@@ -2,11 +2,12 @@ package config
 
 import (
 	"errors"
+	"os"
+	"strings"
+
 	"github.com/betterde/template/fiber/internal/build"
 	"github.com/betterde/template/fiber/internal/journal"
 	"github.com/spf13/viper"
-	"os"
-	"strings"
 )
 
 var Conf *Config
