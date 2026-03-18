@@ -3,19 +3,18 @@ package spa
 import (
 	"embed"
 	"io/fs"
-	"net/http"
 
 	"github.com/betterde/template/fiber/internal/journal"
 )
 
 //go:embed dist/*
-var FS embed.FS
+var spa embed.FS
 
-func Serve() http.FileSystem {
-	dist, err := fs.Sub(FS, "dist")
+func Serve() fs.FS {
+	dist, err := fs.Sub(spa, "dist")
 	if err != nil {
 		journal.Logger.Panicw("Error mounting front-end static resources!", err)
 	}
 
-	return http.FS(dist)
+	return dist
 }

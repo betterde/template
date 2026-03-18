@@ -9,12 +9,12 @@ import (
 	"github.com/betterde/template/fiber/config"
 	"github.com/betterde/template/fiber/internal/journal"
 	"github.com/betterde/template/fiber/internal/response"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/pprof"
-	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/gofiber/fiber/v2/middleware/requestid"
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/cors"
+	"github.com/gofiber/fiber/v3/middleware/logger"
+	"github.com/gofiber/fiber/v3/middleware/pprof"
+	"github.com/gofiber/fiber/v3/middleware/recover"
+	"github.com/gofiber/fiber/v3/middleware/requestid"
 	"go.uber.org/zap"
 )
 
@@ -31,7 +31,7 @@ func InitServer(name, version string) {
 			ServerHeader:  fmt.Sprintf("%s %s", name, version),
 			CaseSensitive: true,
 			// Override default error handler
-			ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			ErrorHandler: func(ctx fiber.Ctx, err error) error {
 				// Status code defaults to 500
 				code := fiber.StatusInternalServerError
 

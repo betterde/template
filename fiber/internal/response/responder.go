@@ -3,7 +3,7 @@ package response
 import (
 	"net/http"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type (
@@ -71,7 +71,7 @@ func (r *Response) WithData(data interface{}) *Response {
 }
 
 // Success Sending a successful response
-func Success(ctx *fiber.Ctx, options ...Option) error {
+func Success(ctx fiber.Ctx, options ...Option) error {
 	response := Response{
 		Code:    fiber.StatusOK,
 		Message: "Success",
@@ -88,7 +88,7 @@ func Success(ctx *fiber.Ctx, options ...Option) error {
 }
 
 // UnAuthenticated Authentication Failure
-func UnAuthenticated(ctx *fiber.Ctx, err error) error {
+func UnAuthenticated(ctx fiber.Ctx, err error) error {
 	response := Response{
 		Code:    http.StatusUnauthorized,
 		Message: err.Error(),
@@ -99,7 +99,7 @@ func UnAuthenticated(ctx *fiber.Ctx, err error) error {
 }
 
 // NotFound Sending a not found response
-func NotFound(ctx *fiber.Ctx, err error) error {
+func NotFound(ctx fiber.Ctx, err error) error {
 	response := Response{
 		Code:    http.StatusNotFound,
 		Message: err.Error(),
@@ -110,7 +110,7 @@ func NotFound(ctx *fiber.Ctx, err error) error {
 }
 
 // ValidationError Sending a validation error response
-func ValidationError(ctx *fiber.Ctx, err error) error {
+func ValidationError(ctx fiber.Ctx, err error) error {
 	response := Response{
 		Code:    http.StatusUnprocessableEntity,
 		Message: err.Error(),
@@ -121,7 +121,7 @@ func ValidationError(ctx *fiber.Ctx, err error) error {
 }
 
 // InternalServerError Sending an internal server error response
-func InternalServerError(ctx *fiber.Ctx, err error) error {
+func InternalServerError(ctx fiber.Ctx, err error) error {
 	response := Response{
 		Code:    http.StatusInternalServerError,
 		Message: err.Error(),
@@ -132,7 +132,7 @@ func InternalServerError(ctx *fiber.Ctx, err error) error {
 }
 
 // Send Sending a basic response
-func Send(ctx *fiber.Ctx, options ...Option) error {
+func Send(ctx fiber.Ctx, options ...Option) error {
 	response := Response{
 		Code:    fiber.StatusOK,
 		Message: "Success",
