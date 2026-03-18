@@ -2,8 +2,11 @@ package routes
 
 import (
 	"github.com/betterde/template/fiber/api/handler"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/swagger"
+	"github.com/betterde/template/fiber/docs"
+	"github.com/betterde/template/fiber/spa"
+	swagger "github.com/gofiber/contrib/v3/swaggo"
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/static"
 )
 
 func RegisterRoutes(app *fiber.App) {
@@ -11,12 +14,11 @@ func RegisterRoutes(app *fiber.App) {
 	api.Get("/health", handler.HealthCheck).Name("api.health.check")
 
 	// Swagger API specification file router
-	//app.Get("/swagger/*", filesystem.New(filesystem.Config{
-	//	Root:               docs.Serve(),
-	//	Index:              "user.swagger.json",
-	//	NotFoundFile:       "user.swagger.json",
-	//	ContentTypeCharset: "UTF-8",
-	//})).Name("Swagger JSON Schema")
+	app.Get("/swagger/*", static.New("", static.Config{
+		FS:         docs.Serve(),
+		Browse:     false,
+		IndexNames: []string{"user.swagger.json"},
+	})).Name("Swagger JSON Schema")
 
 	// Swagger UI router
 	app.Get("/docs/*", swagger.New(swagger.Config{
@@ -26,10 +28,8 @@ func RegisterRoutes(app *fiber.App) {
 	})).Name("web.docs")
 
 	// Embed SPA static resource
-	//app.Get("*", filesystem.New(filesystem.Config{
-	//	Root:               spa.Serve(),
-	//	Index:              "index.html",
-	//	NotFoundFile:       "index.html",
-	//	ContentTypeCharset: "UTF-8",
-	//})).Name("web.spa")
+	app.Get("*", static.New("", static.Config{
+		FS:         spa.Serve(),
+		IndexNames: []string{"index.html"},
+	})).Name("web.spa")
 }
