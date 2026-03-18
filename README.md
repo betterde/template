@@ -8,7 +8,7 @@ Go language project template designed for gonew.
 
 # Usage
 
-These templates were designed to work and be downloaded with [gonew](https://pkg.go.dev/golang.org/x/tools/cmd/gonew).
+These templates were designed to work and be downloaded with [gonew](https://github.com/betterde/gonew).
 
 # License
 
