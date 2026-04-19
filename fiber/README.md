@@ -7,7 +7,7 @@ This project is used to quickly create a project based on the Fiber framework an
 Install gonew if you have not already.
 
 ```bash
-go install golang.org/x/tools/cmd/gonew@latest
+go install github.com/betterde/gonew@latest
 ```
 
 Download this template locally:
