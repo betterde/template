@@ -5,6 +5,7 @@ Go language project template designed for gonew.
 # Templates
 
 * [fiber](fiber): Project initialization template based on Fiber framework
+* [mcp](mcp): Project initialization template base on MCP SDK
 
 # Usage
 
